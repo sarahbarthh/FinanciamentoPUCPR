@@ -1,75 +1,60 @@
 package main;
 
+import modelo.Apartamento;
+import modelo.Casa;
 import modelo.Financiamento;
+import modelo.Terreno;
+import util.InterfaceUsuario;
 
 import java.util.ArrayList;
 
-//Método principal do programa
 public class Main {
-    private ArrayList<Financiamento> financiamentos;
-
     public static void main(String[] args) {
+        InterfaceUsuario interfaceUsuario = new InterfaceUsuario();
 
+        // Crie um ArrayList para armazenar os financiamentos
         ArrayList<Financiamento> financiamentos = new ArrayList<>();
 
-
-        Financiamento casa2 = new Financiamento(150.000, 12, 2);
-        Financiamento apartamento1 = new Financiamento(245.500, 7, 2.5);
-        Financiamento apartamento2 = new Financiamento(500.000, 10, 1.5);
-        Financiamento terreno = new Financiamento(740.000, 8, 1.5);
-
-        financiamentos.add(casa2);
-        financiamentos.add(apartamento1);
-        financiamentos.add(apartamento2);
-        financiamentos.add(terreno);
-
-
-        double totalFinanciamentos = 0.0;
-        for (Financiamento financiamento : financiamentos) {
-            double prazo = financiamento.getPrazoFinanciamento();
-            double taxaJurosAnual = financiamento.getTaxaJurosAnual();
-            double valorImovel = financiamento.getValorImovel();
-            double valorTotalFinanciamento = valorImovel * Math.pow(1 + taxaJurosAnual / 100, prazo);
-
-
-        }
-
-        System.out.println("Financiamento 2: " + casa2.getValorImovel() + " Valor do financiamento: " + casa2.getValorTotalFinanciamento());
-        System.out.println("Financiamento 3: " + apartamento1.getValorImovel() + " Valor do financiamento: " + apartamento1.getValorTotalFinanciamento());
-        System.out.println("Financiamento 4: " + apartamento2.getValorImovel() + " Valor do financiamento: " + apartamento2.getValorTotalFinanciamento());
-        System.out.println("Financiamento 5: " + terreno.getValorImovel() + " Valor do financiamento: " + terreno.getValorTotalFinanciamento());
-
-
-        util.InterfaceUsuario interfaceUsuario = new util.InterfaceUsuario();
-
-        //Usandos os métodos de InterfaceUsuario para ler os dados
+        // Solicite ao usuário os dados gerais
         double valorImovel = interfaceUsuario.mostrarValorImovel();
         int prazoFinanciamento = interfaceUsuario.prazoFinanciamentoEmAnos();
         double taxaJurosAnual = interfaceUsuario.mostrarTaxaJurosAnual();
 
-        //Instanciando um objeto da classe Financiamento com os dados lidos
-        modelo.Financiamento financiamento = new modelo.Financiamento(valorImovel, prazoFinanciamento, taxaJurosAnual);
+        // Solicite ao usuário se é uma Casa, Apartamento ou Terreno
+        int tipoFinanciamento = interfaceUsuario.mostrarTipoFinanciamento();
 
-        //Usando métodos da classe Financiamento para criar o financiamento
-        double pagamentoMensal = financiamento.CalcularPagamentoMensal();
-        double totalPagamento = financiamento.CalcularTotaldoPagamento();
+        if (tipoFinanciamento == 1) { // Casa
+            double tamanhoAreaConstruida = interfaceUsuario.mostrarTamanhoAreaConstruida();
+            double tamanhoTerreno = interfaceUsuario.mostrarTamanhoTerreno();
 
+            Casa casa = new Casa(valorImovel, prazoFinanciamento, taxaJurosAnual, tamanhoAreaConstruida, tamanhoTerreno);
+            financiamentos.add(casa);
+        } else if (tipoFinanciamento == 2) { // Apartamento
+            int numeroVagasGaragem = interfaceUsuario.mostrarNumeroVagasGaragem();
+            int numeroAndar = interfaceUsuario.mostrarNumeroAndar();
 
-        System.out.println("Pagamento mensal:" + pagamentoMensal + casa2.CalcularPagamentoMensal());
-        System.out.println("Total pagamento:" + totalPagamento);
-    }
+            Apartamento apartamento = new Apartamento(valorImovel, prazoFinanciamento, taxaJurosAnual, numeroVagasGaragem, numeroAndar);
+            financiamentos.add(apartamento);
+        } else if (tipoFinanciamento == 3) { // Terreno
+            String tipoZona = interfaceUsuario.mostrarTipoZona();
 
-    public double calcularTotalFinanciamento() {
-        double totalFinanciamento = 0.0;
-        for (Financiamento financiamento : this.financiamentos) {
-            double prazo = financiamento.getPrazoFinanciamento();
-            double taxaJurosAnual = financiamento.getTaxaJurosAnual();
-            double valorImovel = financiamento.getValorImovel();
-
-            double valorTotalFinanciamento = (valorImovel * Math.pow(1 + taxaJurosAnual / 100, prazo));
-
-            totalFinanciamento += valorTotalFinanciamento;
+            Terreno terreno = new Terreno(valorImovel, prazoFinanciamento, taxaJurosAnual, tipoZona);
+            financiamentos.add(terreno);
+        } else {
+            System.out.println("Opção inválida.");
         }
-        return totalFinanciamento;
+
+        // Exiba os dados de todos os financiamentos
+        for (Financiamento financiamento : financiamentos) {
+            System.out.println("Tipo de financiamento: " + financiamento.getClass().getSimpleName());
+            System.out.println("Valor do Imóvel: " + financiamento.getValorImovel());
+            System.out.println("Prazo do Financiamento: " + financiamento.getPrazoFinanciamento());
+            System.out.println("Taxa de Juros Anual: " + financiamento.getTaxaJurosAnual());
+            financiamento.mostrarDadosEspecificos(); // Chama o método específico de cada financiamento
+            System.out.println("Valor Total do Financiamento: " + financiamento.calcularValorTotalFinanciamento());
+            System.out.println("Pagamento Mensal: " + financiamento.calcularPagamentoMensal());
+            System.out.println("Total do Pagamento: " + financiamento.calcularTotalPagamento());
+            System.out.println();
+        }
     }
 }

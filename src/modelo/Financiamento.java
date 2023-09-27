@@ -1,58 +1,43 @@
 package modelo;
 
-public class Financiamento {
-
-    //Atributos da classe
+public abstract class Financiamento {
     private final double valorImovel;
     private final int prazoFinanciamento;
     private final double taxaJurosAnual;
 
-    //Método Construtor
     public Financiamento(double valorImovel, int prazoFinanciamento, double taxaJurosAnual) {
         this.valorImovel = valorImovel;
         this.prazoFinanciamento = prazoFinanciamento;
         this.taxaJurosAnual = taxaJurosAnual;
     }
 
-    //Método getter para valorImovel
     public double getValorImovel() {
         return valorImovel;
     }
 
-    //Método getter para prazoFinanciamento
     public int getPrazoFinanciamento() {
         return prazoFinanciamento;
     }
 
-    //Método getter para taxaJurosAnual
     public double getTaxaJurosAnual() {
         return taxaJurosAnual;
     }
 
-    //Método getter para valorTotalFinanciamento
-    public double getValorTotalFinanciamento() {
-        double valorTotalFinanciamento = valorImovel * Math.pow(1 + taxaJurosAnual / 100, prazoFinanciamento);
-        return valorTotalFinanciamento;
+    // Métodos comuns para calcular o valor total do financiamento, pagamento mensal e total do pagamento
+    public double calcularValorTotalFinanciamento() {
+        return valorImovel * Math.pow(1 + taxaJurosAnual / 100, prazoFinanciamento);
     }
 
-    //Método CalcularPagamentoMensal
-    public double CalcularPagamentoMensal() {
-        double pagamentoMensal = this.valorImovel / (double) this.prazoFinanciamento * (1.0 + this.taxaJurosAnual / 12.0);
-        return pagamentoMensal;
+    public double calcularPagamentoMensal() {
+        return valorImovel / (double) prazoFinanciamento * (1.0 + taxaJurosAnual / 12.0);
     }
 
-    //Método CalcularTotaldoPagamento
-    public double CalcularTotaldoPagamento() {
-        double pagamentoMensal = this.valorImovel / (double) this.prazoFinanciamento * (1.0 + this.taxaJurosAnual / 12.0);
-        double totalPagamento = pagamentoMensal + (double) this.prazoFinanciamento;
-        return totalPagamento;
+    public double calcularTotalPagamento() {
+        return calcularPagamentoMensal() * prazoFinanciamento;
     }
 
-    //Método para mostrar dados do financiamento
-    public void mostrarDadosFinanciamento() {
+    // Métodos abstratos que as subclasses devem implementar
+    public abstract void mostrarDadosEspecificos();
 
-        double valorTotalFinanciamento = this.getPrazoFinanciamento() * this.getTaxaJurosAnual() + this.getValorImovel();
-        System.out.println("Valor total do imóvel: " + getValorImovel());
-        System.out.println("Valor total do financiamento: " + valorTotalFinanciamento);
-    }
+    public abstract void cadastrarDadosEspecificos();
 }

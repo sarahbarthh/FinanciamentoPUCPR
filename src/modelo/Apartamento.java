@@ -1,17 +1,23 @@
 package modelo;
 
 public class Apartamento extends Financiamento {
+    private final int numeroVagasGaragem;
+    private final int numeroAndar;
 
-    //Método construtor
-    public Apartamento(double valorImovel, int prazoFinanciamento, double taxaJurosAnual) {
+    public Apartamento(double valorImovel, int prazoFinanciamento, double taxaJurosAnual, int numeroVagasGaragem, int numeroAndar) {
         super(valorImovel, prazoFinanciamento, taxaJurosAnual);
+        this.numeroVagasGaragem = numeroVagasGaragem;
+        this.numeroAndar = numeroAndar;
     }
 
     @Override
-    public double getValorTotalFinanciamento() {
-        double valorTotal = super.getValorTotalFinanciamento();
-        double numeroMensalidades = getPrazoFinanciamento(); // Obtém o número de mensalidades (prazo)
-        double taxaDecrescente = 5.0 / numeroMensalidades; // Calcula a taxa decrescente
-        return valorTotal + (valorTotal * taxaDecrescente / 100); // Aplica a taxa ao valor total
+    public void mostrarDadosEspecificos() {
+        System.out.println("Número de vagas na garagem: " + numeroVagasGaragem);
+        System.out.println("Número do andar: " + numeroAndar);
+    }
+
+    @Override
+    public void cadastrarDadosEspecificos() {
+        // Solicitar ao usuário os valores específicos para um apartamento e definir os atributos
     }
 }
